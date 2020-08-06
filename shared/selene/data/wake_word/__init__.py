@@ -17,30 +17,5 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-from dataclasses import dataclass
-from datetime import datetime
-
-from selene.data.geography import City, Country, Region, Timezone
-from selene.data.wake_word import WakeWord
-from .text_to_speech import TextToSpeech
-
-
-@dataclass
-class Device(object):
-    """Representation of a Device"""
-
-    account_id: str
-    city: City
-    country: Country
-    core_version: str
-    enclosure_version: str
-    id: str
-    name: str
-    platform: str
-    region: Region
-    text_to_speech: TextToSpeech
-    timezone: Timezone
-    wake_word: WakeWord
-    last_contact_ts: datetime = None
-    placement: str = None
-    add_ts: datetime = None
+from .entity.wake_word import WakeWord
+from .repository.wake_word import WakeWordRepository
