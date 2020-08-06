@@ -28,9 +28,9 @@ from markdown import markdown
 from psycopg2 import connect
 from psycopg2.extras import DateRange
 
-MYCROFT_DB_DIR = "/opt/selene/selene-backend/db/mycroft"
+MYCROFT_DB_DIR = environ.get("DB_DIR", "/opt/selene/selene-backend/db/mycroft")
 MYCROFT_DB_NAME = environ.get("DB_NAME", "mycroft")
-SCHEMAS = ("account", "skill", "device", "geography", "metric")
+SCHEMAS = ("account", "skill", "device", "geography", "metric", "wake_word")
 DB_DESTROY_FILES = ("drop_mycroft_db.sql", "drop_template_db.sql", "drop_roles.sql")
 DB_CREATE_FILES = (
     "create_roles.sql",
@@ -54,16 +54,15 @@ DEVICE_TABLE_ORDER = (
     "category",
     "geography",
     "text_to_speech",
-    "wake_word",
-    "wake_word_settings",
     "account_preferences",
     "account_defaults",
     "device",
     "device_skill",
 )
 GEOGRAPHY_TABLE_ORDER = ("country", "timezone", "region", "city")
-
 METRIC_TABLE_ORDER = ("api", "api_history", "job", "core", "account_activity")
+WAKE_WORD_TABLE_ORDER = ("wake_word", "pocketsphinx_settings", "sample")
+
 
 schema_directory = "{}_schema"
 
@@ -159,6 +158,7 @@ def _build_template_db():
     _build_schema_tables(template_db, "account", ACCOUNT_TABLE_ORDER)
     _build_schema_tables(template_db, "skill", SKILL_TABLE_ORDER)
     _build_schema_tables(template_db, "geography", GEOGRAPHY_TABLE_ORDER)
+    _build_schema_tables(template_db, "wake_word", WAKE_WORD_TABLE_ORDER)
     _build_schema_tables(template_db, "device", DEVICE_TABLE_ORDER)
     _build_schema_tables(template_db, "metric", METRIC_TABLE_ORDER)
     _grant_access(template_db)
