@@ -18,6 +18,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 """Environmental controls for the public API behavioral tests"""
 import os
+from tempfile import mkdtemp
 
 from behave import fixture, use_fixture
 
@@ -67,6 +68,9 @@ def before_all(context):
     context.cache = SeleneCache()
     context.db = connect_to_db(context.client_config["DB_CONNECTION_CONFIG"])
     add_agreements(context)
+    data_dir = mkdtemp()
+    context.wake_word_dir = os.path.join(data_dir, "wake_word", "selene_test_wake_word")
+    os.environ["SELENE_DATA_DIR"] = data_dir
 
 
 def after_all(context):
@@ -78,6 +82,18 @@ def after_all(context):
     remove_agreements(
         context.db, [context.privacy_policy, context.terms_of_use, context.open_dataset]
     )
+    _remove_temp_directory(context.wake_word_dir)
+
+
+def _remove_temp_directory(temp_dir):
+    """Delete the files from the specified directory and then delete the directory
+
+    Assumes that there are no subdirectories in the provided temp directory.
+    """
+
+    for file_name in os.listdir(temp_dir):
+        os.remove(os.path.join(temp_dir, file_name))
+    os.removedirs(temp_dir)
 
 
 def before_scenario(context, _):

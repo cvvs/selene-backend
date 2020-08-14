@@ -1,5 +1,5 @@
 # Mycroft Server - Backend
-# Copyright (C) 2019 Mycroft AI Inc
+# Copyright (C) 2020 Mycroft AI Inc
 # SPDX-License-Identifier: 	AGPL-3.0-or-later
 #
 # This file is part of the Mycroft Server.
@@ -16,8 +16,19 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
+"""Data entities representing a wake word sample."""
+from dataclasses import dataclass
 
-from .entity.sample import WakeWordSample
-from .entity.wake_word import WakeWord
-from .repository.sample import SampleRepository
-from .repository.wake_word import WakeWordRepository
+
+@dataclass
+class WakeWordSample:
+    """Data representation of a wake word sample that has not been classified."""
+
+    wake_word_id: str
+    account_id: str
+    audio_file_name: str
+    directory_group: int = None
+    is_wake_word: str = None
+    failed_attempts: int = None
+    pitch: int = None
+    id: str = None
