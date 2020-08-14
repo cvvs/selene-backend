@@ -18,6 +18,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 """Step functions for the wake word sample upload feature."""
 import os
+from datetime import date
 from pathlib import Path
 
 from behave import then, when  # pylint: disable=no-name-in-module
@@ -65,12 +66,6 @@ def check_sample_table(context):
     assert_that(len(account_samples), equal_to(1))
     sample = account_samples[0]
     assert_that(sample.audio_file_name, equal_to(context.account.id + ".12345.wav"))
-    assert_that(sample.is_wake_word, none())
-    assert_that(sample.pitch, none())
-    assert_that(sample.failed_attempts, none())
+    assert_that(sample.wake_word, equal_to("selene_test_wake_word"))
+    assert_that(sample.audio_file_date, equal_to(date.today()))
     assert_that(sample.directory_group, none())
-
-    wake_word_repository = WakeWordRepository(context.db)
-    account_wake_words = wake_word_repository.get_wake_words(context.account.id)
-    wake_words = [wake_word.setting_name for wake_word in account_wake_words]
-    assert_that("selene_test_wake_word", is_in(wake_words))

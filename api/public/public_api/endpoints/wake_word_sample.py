@@ -18,6 +18,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Public Device API endpoint for uploading a sample wake word for tagging."""
+from datetime import date
 from http import HTTPStatus
 from logging import getLogger
 from os import environ
@@ -142,9 +143,10 @@ class WakeWordSampleUpload(PublicEndpoint):
         :param audio_file_path: temporary location of the file
         """
         sample = WakeWordSample(
-            wake_word_id=wake_word.id,
+            wake_word=wake_word.setting_name,
             account_id=account.id,
             audio_file_name=audio_file_path.name,
+            audio_file_date=date.today(),
         )
         sample_repository = SampleRepository(self.db)
-        sample_repository.add(sample)
+        sample_repository.add(wake_word.id, sample)

@@ -24,11 +24,9 @@ from dataclasses import dataclass
 class WakeWordSample:
     """Data representation of a wake word sample that has not been classified."""
 
-    wake_word_id: str
+    wake_word: str
     account_id: str
     audio_file_name: str
+    audio_file_date: str
     directory_group: int = None
-    is_wake_word: str = None
-    failed_attempts: int = None
-    pitch: int = None
     id: str = None

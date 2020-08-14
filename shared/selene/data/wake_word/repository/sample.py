@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 """Data access and manipulation for the wake_word.sample table."""
+from datetime import date
+
 from ..entity.sample import WakeWordSample
 from ...repository_base import RepositoryBase
 
@@ -27,16 +29,17 @@ class SampleRepository(RepositoryBase):
     def __init__(self, db):
         super(SampleRepository, self).__init__(db, __file__)
 
-    def add(self, sample: WakeWordSample):
+    def add(self, wake_word_id, sample: WakeWordSample):
         """Adds a row to the wake word sample table
 
+        :param wake_word_id: database identifier of the wake word
         :param sample: a wake word sample not yet classified by the community
         :return wake word id
         """
         db_request = self._build_db_request(
             sql_file_name="add_sample.sql",
             args=dict(
-                wake_word_id=sample.wake_word_id,
+                wake_word_id=wake_word_id,
                 account_id=sample.account_id,
                 audio_file_name=sample.audio_file_name,
             ),
